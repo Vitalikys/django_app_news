@@ -1,0 +1,50 @@
+body{
+    /*background-color: #e9ecef;*/
+    background-color: red;
+
+}
+footer{
+    height: 22px;
+    position: fixed;
+    font-size: 15px;
+    bottom: 10px;
+    background-color: aquamarine;
+    text-align: center;
+
+}
+.pagin_list{
+/*position: center;*/
+/*}*/
+    display: flex;
+    align-items: flex-end
+}
+
+
+/*for_delete.html*/
+.input-name{
+    margin-left: 40px;
+    margin-right: 300px;
+    width: 8cm;
+    position: sticky;
+    top: 0;
+}
+.img1{
+    /* "Плавающий" элемент вынимается из потока и "прижимается" */
+    float: left;
+    margin: 20px;
+}
+
+footer{
+    height: 22px;
+    position: fixed;
+    font-size: 15px;
+    bottom: 10px;
+    background-color: aquamarine;
+    text-align: center;
+}
+textarea{
+    position: absolute;
+    top: 24%;
+    right: 20%;
+    height: 100px;
+}

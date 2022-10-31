@@ -1,0 +1,46 @@
+body{
+    background-color: #e9ecef;
+    /*background-color: #ffefef;*/
+
+}
+
+.errorlist{
+    color: red;
+}
+
+
+
+/*in extra page:*/
+.input-name{
+    margin-left: 40px;
+    margin-right: 300px;
+    width: 18cm;
+    position: sticky;
+    top: 0;
+}
+
+.img1{
+    /* "Плавающий" элемент вынимается из потока и "прижимается" */
+    float: inline-end;
+    margin: 20px;
+}
+/*.col-md-5 mr-3{*/
+/*    float: left;*/
+/*}*/
+img{    float: right;}
+footer{
+    height: 22px;
+    position: fixed;
+    font-size: 15px;
+    bottom: 10px;
+    background-color: aquamarine;
+    text-align: center;
+
+}
+/*textarea   on extra page*/
+.for_del_page{
+    position: absolute;
+    top: 24%;
+    right: 20%;
+    height: 100px;
+}

@@ -1,0 +1,43 @@
+{# container  for cycle for each NEW #}
+{#<div class="col-md-9">#}
+{#    {% now "Y-E-d H:i:s" %}   Show Current Time #}
+{#    <t1>; news count=</t1>#}
+{% load hitcount_tags %}
+    {{ news.count }}
+    {% for item in object_list %}
+<!--{#    {% for item in news reversed %} object_list не описуємо, то default   #}-->
+        <div>
+            <div class="card mb-3">
+                <div class="card-header">
+                    {#   {{ forloop.counter }} # задає нумерацію#}
+                    Category: <a href="{% url 'category' item.category.pk %}"> {{ item.category }}</a>
+                </div>
+                <div class="card-body">
+<!--                     {# цикл if  чи є загружене в новину фото #}-->
+                        {% if item.photo %}
+                            <img src="{{ item.photo.url }}" title="{{ item.photo.url }}" alt="{{ item.photo.url }}"
+                                 width="350" class="float-left mr-3 ">
+                        {% else %}
+                            <img src="{{ item.photo_url }}" title="default_photo" alt="фото заглушка"
+                                 width="350" class="float-left mr-3">
+                        {% endif %}
+
+                            <h5 class="card-title {% cycle 'text-danger' 'text-success' 'text-warning' %}">{{ item.title }}</h5>
+                            <p class="card-text">{{ item.content |linebreaksbr|truncatewords:35 }}</p>
+                            {#  <a href="{% url 'article_detail_url' item.pk %} " class="btn btn-primary">Read more...</a> #}
+                            <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Read morе...</a>
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'delete_one' item.id %}" class="btn btn-outline-danger">Delete</a>
+                            {% endif %}
+                        <p></p>
+
+                </div>
+                {#                        # робить різними кольорами текст по черзі, в циклі#}
+
+                <div class="card-footer text-muted">
+                    {{ item.created_at|date:"Y-m-d H:i:s" }}, <p>Views+= {{ item.views }}; HitCountDetalView: {% get_hit_count for item %}</p>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{#</div>#}

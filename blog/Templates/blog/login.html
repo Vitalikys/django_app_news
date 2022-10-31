@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+
+{% block title %} Login : {{ block.super }}{% endblock %}
+
+
+{% block sidebar %}
+{#    {% include 'blog/list_categories.html' %}#}
+{% endblock %}
+
+
+{% block card_news_container %}
+    <h4> login:</h4>
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type = 'submit' class="btn btn-outline-primary"> login</button>
+    </form>
+
+    <h4>or login by GitHub, (using username):</h4>
+
+    <a href="{% provider_login_url "github" method="oauth2" %}"
+            class="btn btn-secondary">GitHub</a>
+
+{% endblock %}

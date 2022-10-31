@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load hitcount_tags %}
+
+{% block title %} {{ object.title }}{% endblock %}
+
+{% block card_news_container %}
+    <h1> {{ object.title }} </h1>
+    {#news_item - old #object.content - is default for DetailView #}
+    <p>{% if object.photo %}
+        <img src="{{ object.photo.url }}" style="float: left" title="{{ object.photo.url }}"
+             alt="{{ object.photo.url }}"
+             width="350" class="col-md-5 mr-3">
+    {% else %}
+        <img src="{{ object.photo_url }}" style="float: left" title="default_rand_photo"
+             alt="фото заглушка"
+             width="380" class="col-md-5 mr-3">
+    {% endif %}
+        {{ object.content |linebreaksbr }}</p>
+    <p>views += {{ object.views }}</p>
+    <p>HitCountDetalView: {% get_hit_count for object %}</p>
+
+
+    {% comment %} ADD NEW  Comments Form {% endcomment %}
+    <hr style="height:6px; color:red">
+    <div class="row">
+        <div class="single-form-left">
+            <hr style="height:6px; color:red">
+            <!-- contact form grid -->
+            <div class="contact-single">
+                <h5 class="editContent"> Добавити коментар </h5>
+                <form action="{% url 'add_review' news.id %}" method="post" class="mt-4" id="formReview">
+                    {% csrf_token %}
+                    {% comment %}add hidden script here to identify parent ; id="contactparent"{% endcomment %}
+                    <input type="hidden" name="parent" id="contactparent" value="">
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">Відправити</button>
+                </form>
+            </div>
+            <p style="font-size: 12px; color: #6a1a21">всього коментарів: {{ news.reviews_set.count }}</p>
+            <!--  //contact form grid ends here -->
+        </div>
+    </div>
+
+    {% comment %} Display Comments {% endcomment %}
+    {% for review in news.get_review %}
+        <div class="media py-3">
+            <img src="/media/user_ico.png" alt="image_usr" style="max-width:40px">
+            <div class="media-body mt-4">
+                <h6> імя: {{ review.name }}</h6>
+                <p style="font-style: italic; color: #0a53be">{{ review.text }}</p>
+                <p style="font-size: 13px;line-height: 5px;">created
+                    at: {{ review.created_review_at |date:"Y-m-d H:i:s" }}</p>
+                <a href="#formReview"
+                   onclick="addReview('{{ review.name }}', '{{ review.id }}')">Відповісти</a>
+
+                {% comment %} child comments tree branch{% endcomment %}
+                {% for rew in review.reviews_set.all %}
+
+                    <div class="media mt-5 editContent">
+                        <a class="pr-3" href="#">
+                            <img src="/media/usr1.jpg" style="max-width:40px" alt="image_under">
+                        </a>
+                        <div class="media-body">
+                            <p>{{ rew.name }}</p>
+                            <p style="font-style: italic; color: #0a53be">{{ rew.text }}</p>
+                            <p style="font-size: 13px;line-height: 5px;">
+                                ch.date: {{ rew.created_review_at |date:"Y-m-d H:i:s" }}</p>
+                        </div>
+                        <hr>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    {% comment %}  script for identify parent review  {% endcomment %}
+    <script>
+        function addReview(name, id) {
+            document.getElementById("contactparent").value = id;
+            document.getElementById("contactcomment").innerText = `${name}, `
+        }
+    </script>
+{% endblock %}

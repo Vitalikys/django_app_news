@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %} Registrtion : {{ block.super }}{% endblock %}
+
+
+{% block sidebar %}
+{#    {% include 'blog/list_categories.html' %}#}
+{% endblock %}
+
+
+{% block card_news_container %}
+    <h4> Registration New User </h4>
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type = 'submit' class="btn btn-outline-primary"> Registrate</button>
+    </form>
+{% endblock %}

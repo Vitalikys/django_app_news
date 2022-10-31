@@ -1,0 +1,141 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+          integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
+          crossorigin="anonymous">
+<!--    {#    <link rel="stylesheet" href=" {% static 'bootstrap/css/bootstrap.min.css' %}">#}-->
+<!--    {#/*не загружає зміни!!! не бачить браузер style.css*/#}-->
+    <link rel="stylesheet" href=" {% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href=" {% static 'css/style.css' %}?{% now 'u'='' %}">
+
+    <title> {% block title %}Новини світу{% endblock %} </title>
+</head>
+
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" >
+    <a class="navbar-brand" href="{% url 'home' %}">Новини</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <a class="nav-link" href="{% url 'add_news' %}"> Добавити новину</a>
+            {#               hide link if user is logined  #}
+            {% if request.user.is_authenticated %}
+                <a class="nav-link" href="{% url 'for_delete' %}"> extra</a>
+              {% endif %}          
+                <a class="nav-link" href="{% url 'send_mail_test' %}"> @mail_us</a>
+                <a class="nav-link" href="{% url 'scraping' %}">scrap</a>
+
+        </ul>
+        <span class="navbar-text">
+            {% if request.user.is_authenticated %}
+                Hi, {{ user.username }} | <a href="{% url 'logout' %}">LogOut</a>
+            {% else %}
+                 <a href="{% url 'register' %}">Register</a>|
+                 <a href="{% url 'login' %}">Login</a>
+            {% endif %}
+
+
+        </span>
+    </div>
+</nav>
+
+<div class="container mt-3">
+
+
+    <div class="row">
+
+        {# Sidebar - list of news_categories .left side window #}
+        <div class="list-group col-md-3">
+            {% block sidebar %}      {% endblock %}
+        </div>
+    <div class="list-group col-md-9">
+    <h2>{{ title }}</h2>
+{#    show errors while registration 45. Регистрация. Часть 1 #}
+            <div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message.tags == 'error' %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ message }}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-{{ message.tags }}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+
+        {# container  for content  for each NEW #}
+        {% block card_news_container %}
+
+        {% endblock %}
+
+  {# views.py -class HomeNews =  add page  navigation end of News list #}
+    {% if  page_obj.has_other_pages %}    {# checking if we have more 1 page#}
+        <nav aria-label="..." class="pagin_list">
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class=" page-item">
+                        <a class="page-link" href="?page={{ p }}" tabindex="-1">Previous</a>
+                    </li>
+                {% endif %}
+                {% for p in page_obj.paginator.page_range %}
+{#                       current page#}
+                    {% if page_obj.number == p %}
+                        <li class="page-item active" aria-current="page">
+                            <a class="page-link" href="?page={{ p }}">{{ p }}
+                                <span class="sr-only">(current)</span> </a>
+                        </li>
+{#                         створюємо умову elif щоб не показували всі сторінки для навігації#}
+                    {% elif p > page_obj.number|add:-3 and p < page_obj.number|add:3 %}
+                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                    {% endif %}
+
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class=" page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">next</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    {% endif %}
+    </div>  {% comment %} end div col-md-9 {% endcomment %}
+    </div> {% comment %} end div row  {% endcomment %}
+</div>
+{# style= "position: fixed; font-size: 15px;"#}
+<footer>© 2022 Kostyreva V</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+{#<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+        crossorigin="anonymous"></script>
+</body>
+</html>
+
+{#https://getbootstrap.com/docs/4.6/getting-started/introduction/#starter-template#}
+
+
+

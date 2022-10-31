@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }}:Delete {% endblock %}
+
+
+{% block sidebar %}
+
+{% endblock %}
+
+
+{% block card_news_container %}
+    <form action="." method="post">
+        {% csrf_token %}
+        <h4> Видалити статтю назавжди? </h4>
+        <h5>"{{ obj.title}}"</h5>
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="{{ obj.get_absolute_url }}" class="btn btn-outline-primary">View article</a>
+    </form>
+{% endblock %}

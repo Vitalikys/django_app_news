@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add news Scraping
+{% endblock %}
+
+
+{% block card_news_container %}
+    <h5>Скачуємо новини з сайту <a href="https://portal.lviv.ua/">portal.lviv.ua</a> , для наповнення контентом наш сайт новин.
+        <br> Завантажуємо з допомогою BeautifulSoup4, async. <br>
+        дані записуємо в data_news.json
+        <br> Зображення якщо відсутнє, то по default=logo
+    </h5>
+    <form method="post" action="{% url 'scraping' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">try scraping)</button>
+    </form>
+
+{#    # show errors  #}
+    {% if message %}
+        <h5>Errors of scraping:</h5>
+        <span style="color: red">{{ message }}</span>
+    {% endif %}
+{% endblock %}

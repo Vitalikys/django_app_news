@@ -1,0 +1,25 @@
+{% load news_tags %}
+{#  все для Sidebar, on Page Left side ,version.Simple_Tagblog/templatetags/news_tags.py #}
+{% get_list_categories as categories %}
+{#<p>menu by ver.Simple_Tag </p>#}
+
+{#different sidebars change #}
+
+{% for categ in categories %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+            <div class="fw-bold">  <a href="{% url 'category' categ.pk %}">{{ categ.title }}</a></div>
+        </div>
+        <span class="badge bg-primary rounded-pill"> {{ categ.cnt }} </span>
+    </li>
+{% endfor %}
+
+<br>
+{#<br>#}
+{# now only for inclusion tag:  #}
+{# можна додавати arg сюди %show_cegories ,arg='any text'% #}
+{#{%  show_categories %}#}
+
+
+
+

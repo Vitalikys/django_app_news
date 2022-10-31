@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Add one new article{% endblock %}
+
+    {# Sidebar - list of news_categories .left side window #}
+<div class="list-group col-md-3">
+    {% block sidebar %}
+        {% include 'blog/list_categories.html' %}
+    {% endblock %}
+</div>
+{# container  for cycle for each NEW #}
+
+{% block card_news_container %}
+
+    <div class="list-group col-md-9">
+        <form action="{% url 'add_news' %}" method="post" enctype="multipart/form-data">
+
+            <H1>Додати новину:</H1>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br/>
+            <button type="submit" class="btn btn-success">Submit ?)</button>
+
+        </form>
+    </div>
+{% endblock %}

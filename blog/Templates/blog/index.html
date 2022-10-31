@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %} Головна сторінка {% endblock %}
+
+
+{% block sidebar %}
+    {% include 'blog/list_categories.html' %}
+{% endblock %}
+
+
+{% block card_news_container %}
+    {% include 'blog/news_card_template.html'%}
+{% endblock %}

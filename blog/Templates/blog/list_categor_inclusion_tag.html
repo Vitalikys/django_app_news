@@ -1,0 +1,7 @@
+{#  все для Sidebar щоб зробити рендер для version.inclusion_Tag згадка тільки в new_tags.py  #}
+{{arg}}  {# any arg - for example #}
+{% for categ in categories %}
+    <a href="{{ categ.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-success">{{ categ.title }}</a>
+
+{% endfor %}
+{#   <a href="{% url 'category' categ.pk %}" стара версія #}

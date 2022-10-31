@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %} Send mail :{{ block.super }}{% endblock %}
+
+
+{% block sidebar %}
+{#    {% include 'blog/list_categories.html' %}#}
+{% endblock %}
+
+
+{% block card_news_container %}
+    <h4> Send mail  to us:</h4>
+    <p>Опис що тут відбувається: <details open> відправляємо мейл на пошту vital***@i.ua з пошти gone***ukr.net <br>
+        для цього потрібно добавляти IMAP-доступ в налаштуваннях скриньки, щоб був доступ до сторонніх програм,
+        там ж генеруємо пароль. Отриманий пароль вносимо до settings.py, потрібно оновлювати його періодично <br>
+    в налаштуваннях Каптчі можна модифікувати картинку, фон, її тип цифри/букви/математичні_дії типу(2+2)
+    </details>
+    </p>
+
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type = 'submit' class="btn btn-primary btn-block"> send mail</button>
+        <button class='js-captcha-refresh'>Refresh captcha</button>
+    </form>
+{% endblock %}

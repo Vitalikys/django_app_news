@@ -3,9 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, CreateView
 from django.core.mail import send_mail
 from django.views.generic.base import View
@@ -15,7 +13,6 @@ from .forms import NewsForm, UserRegisterForm, UserLoginForm, ContactFormMail, R
 from .models import News, Category  # беремо таблицю
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .utils import MyMixin
-from django.core.paginator import Paginator
 from blog.bs4_news_scraping import main
 
 
@@ -73,7 +70,7 @@ def user_logout(request):
 
 # https://docs.djangoproject.com/en/4.0/topics/pagination/
 class HomeNews(MyMixin, ListView):  # Контроллери class a
-    ''' Головна сторінка, список всіх новин'''
+    """ Головна сторінка, список всіх новин"""
     model = News
     mixin_prop = 'hello world'
     paginate_by = 3  # set number of items for pages/
@@ -106,7 +103,7 @@ class HomeNews(MyMixin, ListView):  # Контроллери class a
 #     #return HttpResponse('<h1> Hello wolrd</h1>')
 
 class NewsByCategor(ListView):
-    ''' Головна сторінка, фільтр новин по категоріях'''
+    """ Головна сторінка, фільтр новин по категоріях"""
     model = News
     template_name = 'blog/news_list.html'  # default var =object_list
     allow_empty = False  # to disable NULL categories in list
@@ -124,12 +121,12 @@ class NewsByCategor(ListView):
 '''def get_category(request, category_id):
     news= News.objects.filter(category_id = category_id)
     categor = Category.objects.get(pk = category_id)
-    return render(request, 'blog/index.html', {'news':news, 'category':categor})
+    return render(request,'blog/index.html', {'news':news, 'category':categor})
 '''
 
 
 class ViewNews(HitCountDetailView):
-    ''' Одна новина детальний огляд '''
+    """ Одна новина детальний огляд """
     model = News
     # pk_url_kwarg = 'news_id'
     template_name = 'blog/article_one_news.html'
@@ -147,44 +144,21 @@ class ViewNews(HitCountDetailView):
         return obj
 
 
-# def get_article(request, news_id):  # news_id беремо з urls.} get one news
-#     news_item = News.objects.get(pk=news_id)
-#     return render(request, 'blog/article_one_news.html', {'news_item':news_item })
-
-
 class CreateNews(LoginRequiredMixin, CreateView):
-    '''добавлення новини з сторінки'''
+    """добавлення новини з сторінки"""
     form_class = NewsForm
     template_name = 'blog/add_news.html'
     login_url = '/admin/'  # redirect if not authorized
     # raise_exception = True   # exeption = if not authorized
 
 
-# https://djbook.ru/rel3.0/topics/forms/index.html
-'''
-def add_news(request):
-    if request.method == 'POST':
-        form= NewsForm(request.POST) # забираємо дані
-        if form.is_valid():
-            # print(form.cleaned_data) dict
-            #News.objects.create(**form.cleaned_data) # це якщо прописуємо форму вручну
-            # якщо Meta: model = News fields = '__all__ то просто: form.save()
-            news_new = form.save()
-            return redirect(news_new)
-            #return redirect('home')
-    else:
-        form = NewsForm() #створ екземпл пустої форми
-    return render(request, 'blog/add_news.html', {'form':form} )
-'''
-
-
 def for_delete(request):
-    ''' проста сторінка для всякого непотребу, можна видалити '''
+    """ проста сторінка для всякого непотребу, можна видалити """
     return render(request, 'blog/for_delete.html')
 
 
 def scraping(request):
-    ''' сторінка для парсингу новин з сайту Львів_Портал, скачує новини'''
+    """ сторінка для парсингу новин з сайту Львів_Портал, скачує новини"""
     if request.method == 'POST' and request.user.is_staff:
         try:
             # try to get data from site.// main() - function from bs4_news_scraping
@@ -211,7 +185,7 @@ def scraping(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def delete_one_new(request, pk):
-    ''' видалення одної новини '''
+    """ видалення одної новини """
     obj = get_object_or_404(News, id=pk)
     if request.method == "POST":
         obj.delete()
@@ -223,7 +197,7 @@ def delete_one_new(request, pk):
 '''
 @login_required(login_url=reverse_lazy('login'))
 def delete_one_new(request,id):
-   # видалення одної новини без переходу на форму підтвердження, зразу з home      
+видалення одної новини без переходу на форму підтвердження, зразу з home      
     obj = get_object_or_404(News, id=id)
     obj.delete()
     return redirect('home')
@@ -231,30 +205,20 @@ def delete_one_new(request,id):
 
 
 class AddReview(View):
-    """ Відгуки Отзиви
-    Уроки Django 3 - ForeignKey self django ответ на отзыв - урок 10 #django school
-    https://stackoverflow.com/questions/60497516/django-add-comment-section-on-posts-feed
+    """ Відгуки
+Уроки Django 3 - ForeignKey self django ответ на отзыв - урок 10 #django school
+https://stackoverflow.com/questions/60497516/django-add-comment-section-on-posts-feed
     problem 1:
-     частые запросы в БД из шаблона (не соблюдение MVC/MVT) и присваивание значений в джанго-форму из-за пределов формы (O в SOLID).
-
-problem 2:
-     Не совсем понятно, зачем делать class-based view для обработки пост-запроса, если можно сделать обычную вьюху,
-      но ещё более странно, что  метод get_review добавляется в модель муви, если можно сделать более проще
-      и универсальнее в моделе review проверку на наличие отца(если нет, то значит пишем в первый уровень),
-    ну и ещё данный метод не учитывает ответы на ответ, поэтому можно добавить возможность писать ответы на ответ
-    (привязывать отзыв к вложенному отзыву) и для получения всех вложенных отзывов использовать
-     bfs-поиск(поиск по графу в ширину), где вершина наш отзыв без родителя и возвращаться будет набор всех отзывов-детей,
-      ответов в этом отзыве. Грубо говоря, сделать как в вк, где в комментариях можно отвечать на комментарии,
-      но смещение будет только на 1 уровень.
-     """
-
+     частые запросы в БД из шаблона (не соблюдение MVC/MVT) и присваивание значений
+      в джанго-форму из-за пределов формы (O в SOLID).
+"""
     def post(self, request, pk):
         form = ReviewForm(request.POST)
         news = News.objects.get(id=pk)
         if form.is_valid():
             form = form.save(commit=False)  # призупиняємо
             if request.POST.get("parent", None):
-                # якщо є "parent" то в нього, else = None 
+                # якщо є "parent" то в нього, else = None
                 form.parent_id = int(request.POST.get("parent"))
             form.news = news
             form.save()

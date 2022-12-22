@@ -18,8 +18,10 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254)),
                 ('name', models.CharField(max_length=30, verbose_name="Ім'я")),
                 ('text', models.TextField(max_length=200, verbose_name='Повідомлення')),
-                ('news', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='blog.news', verbose_name='стаття')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='blog.reviews', verbose_name='Parent')),
+                ('news', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                        to='blog.news', verbose_name='стаття')),
+                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                        to='blog.reviews', verbose_name='Parent')),
             ],
             options={
                 'verbose_name': 'Відгук',

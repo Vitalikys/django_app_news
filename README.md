@@ -4,7 +4,7 @@
 не загружаються images !
 
 
-є функція парсингу новин з використанням BS4 BeatifulSoap. Потрібно logIn
+є функція парсингу новин з використанням BS4 BeautifulSoap. Потрібно logIn
 
 Зроблений деплой на Heroku, ссилка https://newskost.herokuapp.com/
 

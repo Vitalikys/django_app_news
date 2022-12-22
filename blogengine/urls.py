@@ -26,7 +26,9 @@ urlpatterns = [
     path('captcha/', include('captcha.urls')),
     path('', include('blog.urls')),
     path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', HomeNews.as_view()), # for redirect to homepage after GIT login
+
+    # for redirect to homepage after GIT login
+    path('accounts/profile/', HomeNews.as_view()),
 
 ]
 

@@ -10,9 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
-from pathlib import Path
-import dj_database_url
-import django_heroku
+
+# import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,8 +25,7 @@ SECRET_KEY = 'django-insecure-yog8+k-7gd4+j3*1q=*bmwc#y!3^e%9^n4t2qr(51bvo33+cab
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['<url>','.herokuapp.com','newskost.herokuapp.com']
-
+ALLOWED_HOSTS = ['127.0.0.1', '<url>', '.herokuapp.com', 'newskost.herokuapp.com', '78.27.202.55']
 
 LOGGING = {
     'version': 1,
@@ -68,9 +66,6 @@ LOGGING = {
     }
 }
 
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -117,7 +112,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates'),
-                    'blog/templates','blog/Templates', 'blog/Templates/blog'
+                 'blog/templates', 'blog/Templates', 'blog/Templates/blog'
                  ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -188,9 +183,9 @@ SOCIALACCOUNT_PROVIDERS = {
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-SITE_ID = 1 # for all auth
+SITE_ID = 1  # for all auth
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # будемо все скидати -до тої папки що ми створили
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'blogengine\static')
 ]
@@ -218,4 +213,4 @@ CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
 CAPTCHA_NOISE_FUNCTIONS = None
 CAPTCHA_FONT_SIZE = 28
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())

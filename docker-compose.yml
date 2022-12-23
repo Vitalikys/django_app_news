@@ -1,0 +1,16 @@
+version: '3.8'
+# для зєднання декількох контейнерів tyt
+services:
+  django_library:
+    build: .
+    command: sh -c "python manage.py migrate &&
+        python manage.py runserver 0.0.0.0:4002"
+
+    volumes:
+      - ./:/usr/src/
+    ports:
+      - "8002:4002"
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=1
+    restart: always
